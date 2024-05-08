@@ -1,0 +1,212 @@
+##############
+# System
+##############
+R version 4.0.0 (2020-04-24)
+Platform: x86_64-pc-linux-gnu (64-bit)
+Running under: Red Hat Enterprise Linux
+
+
+
+##############
+# Dependencies
+##############
+
+------------------------------------------------------------------------
+Script: 
+01-GAMMprocPRS.r
+01a-GAMMprocPRS_simulated.r
+
+loaded packages:
+$tidyverse
+[1] 1 3 0
+
+$magrittr
+[1] 2 0 1
+
+$gamm4
+[1] 0 2 6
+
+$itsadug
+[1] 2 4
+
+$numDeriv
+[1] 2016    8    1    1
+
+$gratia
+[1] 0 6 0
+
+$mgcv
+[1]  1  8 34
+
+$viridis
+[1] 0 5 1
+
+$wesanderson
+[1] 0 3 6
+
+$asbio
+[1] 1 7
+
+$broom
+[1] 0 5 6
+
+$cowplot
+[1] 1 0 0
+
+$data.table
+[1]  1 13  2
+
+$stringi
+[1] 1 4 6
+
+attached base packages:
+[1] tcltk     stats     graphics  grDevices utils     datasets  methods   base     
+
+other attached packages:
+ [1] stringi_1.4.6       data.table_1.13.2   cowplot_1.0.0       broom_0.5.6         asbio_1.7           wesanderson_0.3.6   viridis_0.5.1       viridisLite_0.3.0   gratia_0.6.0        numDeriv_2016.8-1.1
+[11] itsadug_2.4         plotfunctions_1.4   gamm4_0.2-6         mgcv_1.8-34         nlme_3.1-147        lme4_1.1-23         Matrix_1.2-18       magrittr_2.0.1      forcats_0.5.0       stringr_1.4.0      
+[21] dplyr_1.0.7         purrr_0.3.4         readr_1.4.0         tidyr_1.1.2         tibble_3.0.1        ggplot2_3.3.0       tidyverse_1.3.0
+
+
+------------------------------------------------------------------------
+Script: 02-GAMMprocPRS_merge.r
+
+loaded packages:
+$magrittr
+[1] 2 0 1
+
+$tidyverse
+[1] 1 3 0
+
+$sgof
+[1] 2 3 2
+
+$MetBrewer
+[1] 0 2 0
+
+attached base packages:
+[1] stats     graphics  grDevices utils     datasets  methods   base     
+
+other attached packages:
+ [1] MetBrewer_0.2.0 sgof_2.3.2      poibin_1.5      forcats_0.5.0   stringr_1.4.0   dplyr_1.0.7     purrr_0.3.4     readr_1.4.0     tidyr_1.1.2     tibble_3.0.1    ggplot2_3.3.0   tidyverse_1.3.0 magrittr_2.0.1 
+[14] here_0.1
+
+
+------------------------------------------------------------------------
+Script: 03-prepSlopesADNI.r
+
+loaded packages:
+$dplyr
+[1] 1 0 7
+
+$tidyverse
+[1] 1 3 0
+
+$magrittr
+[1] 1 5
+
+$gamm4
+[1] 0 2 6
+
+$itsadug
+[1] 2 4
+
+$gratia
+[1] 0 2 8
+
+$here
+[1] 1 0 1
+
+attached base packages:
+[1] stats     graphics  grDevices utils     datasets  methods   base
+
+other attached packages:
+[1] forcats_0.5.0     stringr_1.4.0     purrr_0.3.4       readr_1.3.1       tidyr_1.1.4       tibble_3.1.6      ggplot2_3.4.0     tidyverse_1.3.0  
+[9] here_1.0.1        gratia_0.2-8      itsadug_2.4       plotfunctions_1.4 gamm4_0.2-6       mgcv_1.8-31       nlme_3.1-147      lme4_1.1-23      
+[17] Matrix_1.2-18     magrittr_1.5      dplyr_1.0.7
+
+
+------------------------------------------------------------------------
+Script: 04-XGBoostCV.r
+
+loaded packages:
+$dplyr
+[1] 1 0 7
+
+$stringr
+[1] 1 4 0
+
+$magrittr
+[1] 1 5
+
+$xgboost
+[1] 1 4 1 1
+
+attached base packages:
+[1] stats     graphics  grDevices utils     datasets  methods   base 
+
+other attached packages:
+[1] xgboost_1.4.1.1 magrittr_1.5    stringr_1.4.0   dplyr_1.0.7
+
+
+------------------------------------------------------------------------
+Script: 05-runMLmultivariate.r
+
+loaded packages:
+$dplyr
+[1] 1 0 7
+
+$stringr
+[1] 1 4 0
+
+$magrittr
+[1] 1 5
+
+$xgboost
+[1] 1 4 1 1
+
+$caret
+[1]  6  0 86
+
+$MetBrewer
+[1] 0 2 0
+
+$tidymodels
+[1] 0 1 4
+
+$here
+[1] 1 0 1
+
+$sgof
+[1] 2 3 2
+
+$cowplot
+[1] 1 0 0
+
+$vip
+[1] 0 3 2
+
+$asbio
+[1] 1 9 6
+
+$data.table
+[1]  1 12  8
+
+attached base packages:
+[1] tcltk     stats     graphics  grDevices utils     datasets  methods   base
+
+other attached packages:
+ [1] data.table_1.12.8  asbio_1.9-6        vip_0.3.2          cowplot_1.0.0      sgof_2.3.2         poibin_1.5         here_1.0.1        
+ [8] yardstick_0.0.9    workflowsets_0.1.0 workflows_0.2.4    tune_0.1.6         tidyr_1.1.4        tibble_3.1.6       rsample_0.1.1     
+[15] recipes_0.1.17     purrr_0.3.4        parsnip_0.1.7      modeldata_0.1.1    infer_1.0.0        dials_0.0.10       scales_1.2.1      
+[22] broom_0.7.10       tidymodels_0.1.4   MetBrewer_0.2.0    caret_6.0-86       ggplot2_3.4.0      lattice_0.20-41    xgboost_1.4.1.1   
+[29] magrittr_1.5       stringr_1.4.0      dplyr_1.0.7
+
+
+Installation:
+Install R at https://www.r-project.org/
+Optional: Install R studio at https://www.rstudio.com/products/rstudio/
+Typical install time on a "normal" desktop computer: 30 minutes
+
+Typical run time for simulation script: 9s
+
