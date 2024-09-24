@@ -4,7 +4,7 @@
 
 Repository associated with the paper
 
-**Brain change trajectories uncover genetic Alzheimer’s disease risk and memory decline in healthy adults**
+**Brain change trajectories in healthy adults correlate with Alzheimer's related genetic variation and memory decline across life**
 ================
 
 [Preprint](https://www.biorxiv.org/content/10.1101/2023.10.09.559446v1)\
