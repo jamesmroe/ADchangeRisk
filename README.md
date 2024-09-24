@@ -8,7 +8,7 @@ Repository associated with the paper
 ================
 
 [Preprint](https://www.biorxiv.org/content/10.1101/2023.10.09.559446v1)\
-Status: Under review
+Status: Accepted (Nature Communications)
 
 <br>
 <hr>
