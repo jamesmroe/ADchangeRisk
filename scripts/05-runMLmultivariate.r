@@ -1145,6 +1145,55 @@ if (mergeALL == 1) {
 # save('figure4B_PRSAD', 'figure4B_PRSADnoAPOE', 'figure4D_PRSAD', 'figure4D_PRSADnoAPOE',file = file.path(a, "reproduce/results/PRS-ADmodels_figure4_PCmultivariate.Rda"))
 
 
+#plot results
+# rm(list=ls())
+# load_from = "excel" #/ "Rdat"
+# # load_from = "Rdat"
+# 
+# sheets = c("Fig_4b-c PRS-AD",
+#            "Fig_4b-c noAPOE",
+#            "Fig_4e PRS-AD",
+#            "Fig_4e noAPOE")
+# 
+# if (load_from == "excel") {
+#   OUT1_PC1 = read.xlsx("source_data.xlsx", sheet = sheets[1])
+#   OUT2_PC1 = read.xlsx("source_data.xlsx", sheet = sheets[2])
+#   OUT1_PCroll = read.xlsx("source_data.xlsx", sheet = sheets[3])
+#   OUT2_PCroll = read.xlsx("source_data.xlsx", sheet = sheets[4])
+#   
+# } else if (load_from == "Rdat") {
+#   load(here("results/PRS-ADmodels_figure4_PCmultivariate.Rda"))
+#   OUT1_PC1 = figure4B_PRSAD
+#   OUT2_PC1 = figure4B_PRSADnoAPOE
+#   OUT1_PCroll = figure4D_PRSAD
+#   OUT2_PCroll = figure4D_PRSADnoAPOE
+# }
+# 
+# mytheme = theme(
+#   plot.background = element_rect(fill = "white"),
+#   panel.background = element_rect(fill = "white"),
+#   panel.grid.major = element_blank(),
+#   panel.grid.minor = element_blank(),
+#   title = element_text(size=17),
+#   text = element_text(color = "black", size = 18, family="Nimbus Sans Narrow"),
+#   plot.title = element_text(hjust = 0.5),
+#   axis.ticks = element_blank(),
+#   axis.title.y = element_text(color = "black", size = 22, vjust =-1, margin = margin(0,20,0,0)),
+#   axis.title.x = element_text(color = "black", size = 22, vjust = -2, margin = margin(0,20,20,0)),
+#   axis.text = element_text(color = "black", size = 18),
+#   legend.key.size = unit(1,"cm"))
+# 
+# 
+# maxscalersq = 0.1844 #scale of rsquared plot
+# FDR_wAPOE = BH(c(OUT1_PC1$p.value, OUT1_PCroll$p.value), .05)
+# (FDRthreshAPOE=max(FDR_wAPOE$data[FDR_wAPOE$Adjusted.pvalues<.05]))
+# 
+# OUT1_PC1$FDRsig = OUT1_PC1$FDRsig_PRSAD
+# OUT1_PCroll$FDRsig = OUT1_PCroll$FDRsig_PRSAD
+# OUT2_PC1$dotalphapoe = factor(OUT2_PC1$dotalphapoe)
+# OUT2_PCroll$dotalphapoe = factor(OUT2_PCroll$dotalphapoe)
+# OUT1_PC1$agecut = OUT1_PC1$lower_agerange_genetic
+
 
 # ---- plotALL results ----
 
@@ -1161,72 +1210,74 @@ if (plotALL == 1) {
      geom_point(aes(alpha=factor(dotalpha)), col="black", position=position_dodge(width=0.5), shape=21, size=4, stroke=0.75) +
      theme_classic() + 
      labs(x = "Age-range") +
-     ggtitle(paste0("PCA", w)) +
+     ggtitle(paste0("PCA 1-50noHippnoAmy")) +
      mytheme +
      theme(axis.text = element_text(size=8),
            axis.title.x = element_text(size=7, vjust=-3, margin=margin(0,30,0,0)),
            axis.title.y = element_text(size=7, margin = margin(0,10,0,0)),
            legend.title = element_text(size=8),
            plot.title = element_text(size=10),
-           plot.subtitle = element_text(size=10, hjust=0.5)
+           plot.subtitle = element_text(size=10, hjust=0.5),
+           axis.ticks = element_line()
      ) +
      
-   #change shape
-   scale_shape_manual(values = c("AD_Jansen"=16, "AD_Kunkle"=15, "AD_Lambert"=17, "AD_Wightman"=4))
+     #change shape
+     scale_shape_manual(values = c("AD_Jansen"=16, "AD_Kunkle"=15, "AD_Lambert"=17, "AD_Wightman"=4))
   )
   
   
   # PC1 estimates ----
   (pEst = ggplot(OUT1_PC1, aes(x=agerange, y=(abs(estimate)*-1), group=factor(PGS), shape=factor(PGS))) +
-      scale_x_discrete() +
-      scale_alpha_discrete(range = c(0,1)) +
-      geom_point(position = position_dodge(width=0.5),colour="#793349",size=3.5) +
-      theme_classic() + 
-      labs(x = "Age-range") +
-      ggtitle(paste0("PCA1")) +
-      theme(axis.text = element_text(size=8),
-            axis.title.x = element_text(size=7, vjust=-3, margin=margin(0,30,0,0)),
-            axis.title.y = element_text(size=7, margin = margin(0,10,0,0)),
-            legend.title = element_text(size=8),
-            plot.title = element_text(size=10),
-            plot.subtitle = element_text(size=10, hjust=0.5)
-      ) +
-      #change shape
-      scale_shape_manual(values = c("AD_Jansen"=16, "AD_Kunkle"=15, "AD_Lambert"=17, "AD_Wightman"=4)) +
-      theme(axis.text = element_text(size=14),
-              axis.text.x = element_blank(),
-              axis.ticks.x = element_line(),
-              panel.border = element_rect(color = "black", fill = NA, size = 0.75))
+     scale_x_discrete() +
+     scale_alpha_discrete(range = c(0,1)) +
+     geom_point(position = position_dodge(width=0.5),colour="#793349",size=3.5) +
+     theme_classic() + 
+     labs(x = "Age-range") +
+     ggtitle(paste0("PCA1")) +
+     theme(axis.text = element_text(size=8),
+           axis.title.x = element_text(size=7, vjust=-3, margin=margin(0,30,0,0)),
+           axis.title.y = element_text(size=7, margin = margin(0,10,0,0)),
+           legend.title = element_text(size=8),
+           plot.title = element_text(size=10),
+           plot.subtitle = element_text(size=10, hjust=0.5),
+           axis.ticks = element_line()
+     ) +
+     #change shape
+     scale_shape_manual(values = c("AD_Jansen"=16, "AD_Kunkle"=15, "AD_Lambert"=17, "AD_Wightman"=4)) +
+     theme(axis.text = element_text(size=14),
+           axis.text.x = element_blank(),
+           axis.ticks.x = element_line(),
+           panel.border = element_rect(color = "black", fill = NA, size = 0.75))
   )
   
   
   # PC1 rsquared ----
   (pPCArsq = OUT1_PC1 %>%
-      
-      ggplot(., aes(x=agerange, y=prsq*-1,group=factor(PGS)), col="#945c6d", fill="#945c6d") +#color=factor(PGS),fill=factor(PGS))) +
-      scale_x_discrete() +
-      scale_alpha_discrete(range = c(0, 1)) +
-      ylim(c(maxscalersq*-1,0)) +
-      geom_col(aes(alpha=as.factor(FDRsig), y=prsq*-1,x=agerange), color=NA, fill="#945c6d", position=position_dodge(width=0.5), width=0.4) +
-      geom_errorbar(aes(alpha=as.factor(FDRsig), ymin=prsq_lwr*-1,ymax=prsq_upr*-1),color="#945c6d",position=position_dodge(width=0.5),size=0.5, width=0) +
-      geom_point(data=OUT2_PC1, aes(alpha=dotalphapoe, y=prsq*-1, x=agerange),col="black",position=position_dodge(width=0.5),shape=3, size=3, stroke=1) +
-      geom_hline(yintercept = 0, size=0.5) +
-      labs(x="Age-range", y=paste(parse(text="R^2"),"PGS")) +
-      theme_classic() +
-      mytheme +
-      theme(
-        panel.background = element_rect(fill = "white"),
-        axis.text = element_text(size = 8),
-        axis.title.y = element_text(size = 8, margin = margin(0,10,0,0)),
-        axis.title.x = element_blank(),
-        legend.text = element_text(size = 8),
-        legend.title = element_text(size = 8),
-        plot.title = element_text(size =10),
-        plot.subtitle = element_text(size = 10, hjust=0.5),
-        axis.ticks.x = element_blank(),
-        
-      ) +
-      labs(color='PGS',fill='PGS', alpha="p<.05", shape=FALSE)
+     
+     ggplot(., aes(x=agerange, y=prsq*-1,group=factor(PGS)), col="#945c6d", fill="#945c6d") +#color=factor(PGS),fill=factor(PGS))) +
+     scale_x_discrete() +
+     scale_alpha_discrete(range = c(0, 1)) +
+     ylim(c(maxscalersq*-1,0)) +
+     geom_col(aes(alpha=as.factor(FDRsig), y=prsq*-1,x=agerange), color=NA, fill="#945c6d", position=position_dodge(width=0.5), width=0.4) +
+     geom_errorbar(aes(alpha=as.factor(FDRsig), ymin=prsq_lwr*-1,ymax=prsq_upr*-1),color="#945c6d",position=position_dodge(width=0.5),size=0.5, width=0) +
+     geom_point(data=OUT2_PC1, aes(alpha=dotalphapoe, y=prsq*-1, x=agerange),col="black",position=position_dodge(width=0.5),shape=3, size=3, stroke=1) +
+     geom_hline(yintercept = 0, size=0.5) +
+     labs(x="Age-range", y=paste(parse(text="R^2"),"PGS")) +
+     theme_classic() +
+     mytheme +
+     theme(
+       panel.background = element_rect(fill = "white"),
+       axis.text = element_text(size = 8),
+       axis.title.y = element_text(size = 8, margin = margin(0,10,0,0)),
+       axis.title.x = element_blank(),
+       legend.text = element_text(size = 8),
+       legend.title = element_text(size = 8),
+       plot.title = element_text(size =10),
+       plot.subtitle = element_text(size = 10, hjust=0.5),
+       axis.ticks = element_line(),
+       
+     ) +
+     labs(color='PGS',fill='PGS', alpha="p<.05", shape=FALSE)
   ) 
   
   pPCANoLegend = pPCA + theme(legend.position = "none",
@@ -1308,7 +1359,8 @@ if (plotALL == 1) {
            legend.text = element_text(size=8),
            legend.title = element_text(size=8),
            plot.title = element_text(size=10),
-           plot.subtitle = element_text(size=10, hjust=0.5)
+           plot.subtitle = element_text(size=10, hjust=0.5),
+           axis.ticks = element_line()
      ) +
      #change shape
      scale_shape_manual(values = c("Jansen"=16, "Kunkle"=15, "AD"=17, "Wightman"=4))
@@ -1317,32 +1369,32 @@ if (plotALL == 1) {
   
   # PCroll rsquared ----
   (pRollRsq = OUT1_PCroll %>%
-      
-      ggplot(., aes(x=1:nrow(OUT1_PCroll), y=-log10(p.value), col=as.factor(ww), fill=as.factor(ww), shape=as.factor(score))) +
-      scale_x_discrete() +
-      scale_alpha_discrete(range = c(0, 1)) +
-      ylim(c(maxscalersq*-1,0)) +
-      geom_col(aes(alpha=as.factor(FDRsig), y=prsq*-1,x=1:nrow(OUT1_PCroll)), color=NA, position=position_dodge(width=.4), width=0.75) +
-      geom_errorbar(aes(alpha=as.factor(FDRsig), ymin=prsq_lwr*-1,ymax=prsq_upr*-1),position=position_dodge(width=0.5),size=.3, width=0) +
-      geom_point(data=OUT2_PCroll, aes(alpha=dotalphapoe, y=prsq*-1, x=1:nrow(OUT1_PCroll)),col="black",position=position_dodge(width=0.5),shape=3, size=3, stroke=1) +
-      geom_hline(yintercept = 0, size=0.5) +
-      
-      labs(x="Age-range", y=paste(parse(text="R^2"),"PGS")) +
-      theme_classic() +
-      mytheme +
-      theme(
-        panel.background = element_rect(fill = "#f3f3f3"),
-        axis.text = element_text(size = 8),
-        axis.title.y = element_text(size = 8, margin = margin(0,10,0,0)),
-        axis.title.x = element_blank(),
-        legend.text = element_text(size = 8),
-        legend.title = element_text(size = 8),
-        plot.title = element_text(size =10),
-        plot.subtitle = element_text(size = 10, hjust=0.5),
-        axis.ticks.x = element_blank(),
-        
-      ) +
-      labs(color='PGS',fill='PGS', alpha="p<.05", shape=FALSE)
+     
+     ggplot(., aes(x=1:nrow(OUT1_PCroll), y=-log10(p.value), col=as.factor(ww), fill=as.factor(ww), shape=as.factor(score))) +
+     scale_x_discrete() +
+     scale_alpha_discrete(range = c(0, 1)) +
+     ylim(c(maxscalersq*-1,0)) +
+     geom_col(aes(alpha=as.factor(FDRsig), y=prsq*-1,x=1:nrow(OUT1_PCroll)), color=NA, position=position_dodge(width=.4), width=0.75) +
+     geom_errorbar(aes(alpha=as.factor(FDRsig), ymin=prsq_lwr*-1,ymax=prsq_upr*-1),position=position_dodge(width=0.5),size=.3, width=0) +
+     geom_point(data=OUT2_PCroll, aes(alpha=dotalphapoe, y=prsq*-1, x=1:nrow(OUT1_PCroll)),col="black",position=position_dodge(width=0.5),shape=3, size=3, stroke=1) +
+     geom_hline(yintercept = 0, size=0.5) +
+     
+     labs(x="Age-range", y=paste(parse(text="R^2"),"PGS")) +
+     theme_classic() +
+     mytheme +
+     theme(
+       panel.background = element_rect(fill = "#f3f3f3"),
+       axis.text = element_text(size = 8),
+       axis.title.y = element_text(size = 8, margin = margin(0,10,0,0)),
+       axis.title.x = element_blank(),
+       legend.text = element_text(size = 8),
+       legend.title = element_text(size = 8),
+       plot.title = element_text(size =10),
+       plot.subtitle = element_text(size = 10, hjust=0.5),
+       axis.ticks = element_line()
+       
+     ) +
+     labs(color='PGS',fill='PGS', alpha="p<.05", shape=FALSE)
   ) 
   
   
@@ -1379,6 +1431,5 @@ if (plotALL == 1) {
   #   units = "cm",
   #   dpi = 600
   # )
-
+  
 }
-

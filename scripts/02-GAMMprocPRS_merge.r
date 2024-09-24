@@ -526,3 +526,7 @@ if (simulated) {
   pSlopeAllfacet[[7]]
   pSlopeAllfacet[[8]]
 }
+
+
+
+load(here("results/PRS-ADmodels_figure4_PCmultivariate.Rda"))
