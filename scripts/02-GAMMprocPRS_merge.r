@@ -23,6 +23,7 @@ rm(list=ls())
 simulated = 0
 saveplots = 0
 load_from = "excel" #/ "Rdat"
+# load_from = "Rdat"
 # select analysis stream -----------------
 
 
@@ -147,12 +148,16 @@ if (load_from == "excel") {
   SLOPESALL3 = rename_cols(SLOPESALL3)
   SLOPESALL4 = rename_cols(SLOPESALL4)
   
+  SLOPESALL1 %<>% mutate(change = "ageRelChange")
+  SLOPESALL2 %<>% mutate(change = "ageRelChange")
+  SLOPESALL3 %<>% mutate(change = "absChange")
+  SLOPESALL4 %<>% mutate(change = "absChange")
 }
 
 
 #DF of all 576 PRS-AD tests
-allPRSAD = rbind(SLOPESALL1 %>% mutate(change = "ageRelChange"),
-              SLOPESALL3 %>% mutate(change = "absChange"))
+allPRSAD = rbind(SLOPESALL1,
+              SLOPESALL3)
 
 
 #144 FDR-corrected PRS-AD tests
@@ -526,7 +531,3 @@ if (simulated) {
   pSlopeAllfacet[[7]]
   pSlopeAllfacet[[8]]
 }
-
-
-
-load(here("results/PRS-ADmodels_figure4_PCmultivariate.Rda"))
