@@ -38,17 +38,18 @@ if (analysis_sample == "main") {
            "Fig_4e PRS-AD",
            "Fig_4e noAPOE")
 } else {
-  sheets = c("Fig_5c-d replication")
+  sheets = c("Fig_5c-d PRS-AD rep")
 }
 
 
 if (load_from == "excel") {
   
   if (analysis_sample == "main") {
-    OUT1_PC1 = read.xlsx("source_data.xlsx", sheet = sheets[1])
-    OUT2_PC1 = read.xlsx("source_data.xlsx", sheet = sheets[2])
-    OUT1_PCroll = read.xlsx("source_data.xlsx", sheet = sheets[3])
-    OUT2_PCroll = read.xlsx("source_data.xlsx", sheet = sheets[4])
+    source_file = "source_data_main.xlsx"
+    OUT1_PC1 = read.xlsx(source_file, sheet = sheets[1])
+    OUT2_PC1 = read.xlsx(source_file, sheet = sheets[2])
+    OUT1_PCroll = read.xlsx(source_file, sheet = sheets[3])
+    OUT2_PCroll = read.xlsx(source_file, sheet = sheets[4])
     
     # significance indicators for plotting
     OUT1_PC1$FDRsig = OUT1_PC1$FDRsig_PRSAD
@@ -62,7 +63,8 @@ if (load_from == "excel") {
     OUT2_PCroll$ww = OUT2_PCroll$window
     
   } else if (analysis_sample == "replication") {
-    OUT1_PC1 = read.xlsx("source_data.xlsx", sheet = sheets[1])
+    source_file = "source_data_replication.xlsx"
+    OUT1_PC1 = read.xlsx(source_file, sheet = sheets[1])
     OUT1_PC1$dotalpha = factor(ifelse(OUT1_PC1$p.value < .05, 1, 0))
   }
   

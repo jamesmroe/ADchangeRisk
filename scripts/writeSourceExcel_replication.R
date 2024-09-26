@@ -191,7 +191,7 @@ if (makeExcel) {
   
   
   common_names = new_names[new_names %in% names(df7)]
-  df7 %<>% dplyr::select(all_of(common_names), everything()) %>% select(-SS, -dotalpha, -ww, -HC)
+  df7 %<>% dplyr::select(all_of(common_names), everything()) %>% select(-SS, -dotalpha, -ww, -HC) %>% mutate(sample = "REPLICATION")
   
   
   writeData(wb, sheet = sheets[5], df7)
