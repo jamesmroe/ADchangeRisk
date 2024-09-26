@@ -133,8 +133,8 @@ if (simulated) {
 rename_cols = function(dat) {
   dat %<>% dplyr::select(-agecut) %>% rename(
     lower_agerange_genetic = agecut2,
-    N_genetic = N,
-    N_lifespan = Nlife
+    n_genetic = N,
+    n_lifespan = Nlife
   )
 }
 
@@ -159,7 +159,15 @@ if (makeExcel) {
                "Fig_2b noAPOE",
                
                "Fig_2c PRS-AD",
-               "Fig_2c noAPOE"
+               "Fig_2c noAPOE",
+               
+               "Fig_4b-c PRS-AD",
+               "Fig_4b-c noAPOE",
+               
+               "Fig_4e PRS-AD",
+               "Fig_4e noAPOE",
+               
+               "Fig_5c-d replication"
     )
     for (sheetnum in 1:length(sheets)) {
       addWorksheet(wb, sheets[sheetnum])
@@ -169,6 +177,7 @@ if (makeExcel) {
     df2 = allPRSADnoAPOEout
     df1$model = as.numeric(df1$model)
     df2$model = as.numeric(df2$model)
+    df1$SS = NULL; df2$SS = NULL
     
     header_style <- createStyle(textDecoration = "bold")
     
@@ -236,14 +245,14 @@ if (makeExcel) {
         df2[df2$roi == unique(df2$roi)[6],]))
     )
     
-    for (sheetnum in 1:length(sheets)) {
-      addStyle(wb, sheet = sheets[sheetnum], style = header_style, rows = 1, cols = 1:ncol(df1), gridExpand = TRUE)
-      setColWidths(wb, sheet = sheets[sheetnum], cols = 1:ncol(df1), widths = "auto")
-    }
+    # for (sheetnum in 1:length(sheets)) {
+    #   addStyle(wb, sheet = sheets[sheetnum], style = header_style, rows = 1, cols = 1:ncol(df1), gridExpand = TRUE)
+    #   setColWidths(wb, sheet = sheets[sheetnum], cols = 1:ncol(df1), widths = "auto")
+    # }
     # saveWorkbook(wb, file = "source_data.xlsx", overwrite = TRUE)
   
     
-    # add multivariate results
+    # add multivariate results from main sample
     load(here("results/PRS-ADmodels_figure4_PCmultivariate.Rda"))
     df1 = rename_cols(df1)
     df2 = rename_cols(df2)
@@ -260,9 +269,9 @@ if (makeExcel) {
       dat %<>% rename(lower_agerange_genetic = agecut, apoe = ap, FDRsig_PRSAD = FDRsig)
       dat %<>% mutate(change = "ageRelChange",
                       model = row_number(),
-                      HC = "noHCv_noAmyV",
+                      hippocampus = "noHippocampus_noAmygdala",
                       FDRsig_PRSAD = as.numeric(as.character(FDRsig_PRSAD)))
-      dat %<>% select(-contains("conf"), -type)
+      dat %<>% select(-contains("conf"), -type, HC)
     }
 
     figure4B_PRSAD = munge_cols(figure4B_PRSAD, "PC1relChange")
@@ -287,7 +296,7 @@ if (makeExcel) {
     new_names[!new_names %in% names(figure4D_PRSADnoAPOE)]
     names(figure4D_PRSADnoAPOE)[!names(figure4D_PRSADnoAPOE) %in% new_names]
 
-    link = df1 %>% select(lower_agerange_genetic, N_genetic, N_lifespan) %>% distinct()
+    link = df1 %>% select(lower_agerange_genetic, n_genetic, n_lifespan) %>% distinct()
 
 
     df3 = figure4B_PRSAD
@@ -301,34 +310,86 @@ if (makeExcel) {
     df6 = left_join(df6, link)
 
     common_names = new_names[new_names %in% names(df3)]
-    df3 %<>% dplyr::select(all_of(common_names), everything())
-    df4 %<>% dplyr::select(all_of(common_names), everything())
-    df5 %<>% dplyr::select(all_of(common_names), everything())
-    df6 %<>% dplyr::select(all_of(common_names), everything())
+    df3 %<>% dplyr::select(all_of(common_names), everything()) %>% select(-SS, -HC, -contains("dotalpha"))
+    df4 %<>% dplyr::select(all_of(common_names), everything()) %>% select(-SS, -HC, -contains("dotalpha"))
+    df5 %<>% dplyr::select(all_of(common_names), everything()) %>% select(-SS, -HC, -contains("dotalpha")) %>% rename(window = ww)
+    df6 %<>% dplyr::select(all_of(common_names), everything()) %>% select(-SS, -HC, -contains("dotalpha")) %>% rename(window = ww)
     
     
 
     df4[df3$FDRsig_PRSAD != 1,c(2:6, 13:15)] = NA
     df6[df5$FDRsig_PRSAD != 1,c(2:6, 13:15)] = NA
 
-    newsheets = c("Fig_4b-c PRS-AD",
-                  "Fig_4b-c noAPOE",
-                  "Fig_4e PRS-AD",
-                  "Fig_4e noAPOE"
-    )
+    # newsheets = c("Fig_4b-c PRS-AD",
+    #               "Fig_4b-c noAPOE",
+    #               "Fig_4e PRS-AD",
+    #               "Fig_4e noAPOE"
+    # )
 
-    for (num in 1:length(newsheets)) {
-      addWorksheet(wb, newsheets[num])
+    # for (num in 1:length(newsheets)) {
+    #   addWorksheet(wb, newsheets[num])
+    # }
+
+    writeData(wb, sheet = sheets[9], df3)
+    writeData(wb, sheet = sheets[10], df4)
+    writeData(wb, sheet = sheets[11], df5)
+    writeData(wb, sheet = sheets[12], df6)
+
+    # for (num in 1:length(newsheets)) {
+    #   addStyle(wb, sheet = sheets[num], style = header_style, rows = 1, cols = 1:ncol(df6), gridExpand = TRUE)
+    #   setColWidths(wb, sheet = sheets[num], cols = 1:ncol(df6), widths = "auto")
+    # }
+    # saveWorkbook(wb, file = "source_data.xlsx", overwrite = TRUE)
+    
+    
+    # add multivariate results from replication sample
+    load(here("results/PRS-ADmodels_figure5_PCmultivariate_replication.Rda"))
+    
+    #harmonize colnames
+    common_names = names(figure5C_PRSAD)[names(figure5C_PRSAD) %in% new_names]
+    names(figure5C_PRSAD)[!names(figure5C_PRSAD) %in% new_names]
+    new_names[!new_names %in% names(figure5C_PRSAD)]
+    
+    munge_cols = function(dat, roi) {
+      dat$roi = roi
+      dat$roiname = dat$roi
+      dat %<>% rename(lower_agerange_genetic = agecut, apoe = ap)
+      dat %<>% mutate(change = "ageRelChange",
+                      model = row_number(),
+                      HC = "noHCv_noAmyV"
+                      )
+      dat %<>% select(-contains("conf"), -type)
     }
+    
+    figure5C_PRSAD = munge_cols(figure5C_PRSAD, "PC1relChange")
+    figure5C_PRSAD %<>% select(-absestimateneg)
+    new_names[!new_names %in% names(figure5C_PRSAD)]
+    names(figure5C_PRSAD)[!names(figure5C_PRSAD) %in% new_names]
+    
+    
+    df7 = figure5C_PRSAD
+    
+    
+    common_names = new_names[new_names %in% names(df7)]
+    df7 %<>% dplyr::select(all_of(common_names), everything()) %>% select(-SS, -dotalpha, -ww, -HC)
 
-    writeData(wb, sheet = newsheets[1], df3)
-    writeData(wb, sheet = newsheets[2], df4)
-    writeData(wb, sheet = newsheets[3], df5)
-    writeData(wb, sheet = newsheets[4], df6)
-
-    for (num in 1:length(newsheets)) {
-      addStyle(wb, sheet = sheets[num], style = header_style, rows = 1, cols = 1:ncol(df4), gridExpand = TRUE)
-      setColWidths(wb, sheet = sheets[num], cols = 1:ncol(df4), widths = "auto")
+    # newsheets = c("Fig_5c-d replication"
+    # )
+    
+    # for (num in 1:length(newsheets)) {
+    #   addWorksheet(wb, newsheets[num])
+    # }
+    
+    writeData(wb, sheet = sheets[13], df7)
+    
+    df_list = list(df1, df2, df3, df4, df5, df6, df7)
+    maxcols = max(sapply(df_list, ncol))
+    unique(unlist(sapply(df_list, names)))
+    
+    
+    for (num in 1:length(sheets)) {
+      addStyle(wb, sheet = sheets[num], style = header_style, rows = 1, cols = 1:maxcols, gridExpand = TRUE)
+      setColWidths(wb, sheet = sheets[num], cols = 1:maxcols, widths = "auto")
     }
     saveWorkbook(wb, file = "source_data.xlsx", overwrite = TRUE)
     
