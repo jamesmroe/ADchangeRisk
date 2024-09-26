@@ -6,7 +6,7 @@
 
 
 #========================================================================================#
-## Purpose: plot multivariate PRS-AD model results for main (figure 4) or replication sample (figure 5)
+## Purpose: plot multivariate PRS-AD model results for main sample and replication sample
 ## Script is fully executable
 ## Instructions: set to analysis_sample to "main" or "replication" to plot the multivariate results for that sample
 #========================================================================================#
@@ -69,7 +69,7 @@ if (load_from == "excel") {
 } else if (load_from == "Rdat") {
   
   if (analysis_sample == "main") {
-    load(here("results/PRS-ADmodels_figure4_PCmultivariate.Rda"))
+    load(here("results/PRSADmodels_figure4_PCmultivariate.Rda"))
     OUT1_PC1 = figure4B_PRSAD
     OUT2_PC1 = figure4B_PRSADnoAPOE
     OUT1_PCroll = figure4D_PRSAD
@@ -82,7 +82,7 @@ if (load_from == "excel") {
     OUT2_PCroll$dotalphapoe = factor(OUT2_PCroll$dotalphapoe)
     
   } else if (analysis_sample == "replication") {
-    load(here("results/PRS-ADmodels_figure5_PCmultivariate_replication.Rda"))
+    load(here("results/PRSADmodels_figure5_PCmultivariate_replication.Rda"))
     OUT1_PC1 = figure5C_PRSAD
   }
 }

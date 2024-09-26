@@ -47,11 +47,11 @@ for (roiname in roinames) {
   
   if (simulated == 1) {
     print("loading simulated results")
-    load(here("simulate/PRSADmodels_simulated.Rda"))
+    load(here("simulate/PRS-ADmodels_simulated.Rda"))
     
   } else if (simulated == 0) {
     #main results
-    filename=paste0(here(paste0("results/PRSADmodels_S1_",roiname,".publication.Rda")))
+    filename=paste0(here(paste0("results/PRS-ADmodels_S1_",roiname,".publication.Rda")))
     print(paste0("loading ",filename))
     load(filename)  
   }
@@ -125,8 +125,11 @@ allPRSADnoAPOEout %<>% dplyr::select(model, FDRsig, everything()) %>%
 
 
 if (simulated) {
-  allPRSADout %<>% mutate(SIMULATED ="SIMULATED_RESULTS")
-  allPRSADnoAPOEout %<>% mutate(SIMULATED ="SIMULATED_RESULTS")
+  allPRSADout %<>% mutate(sample ="SIMULATED")
+  allPRSADnoAPOEout %<>% mutate(sample ="SIMULATED")
+} else {
+  allPRSADout %<>% mutate(sample ="MAIN")
+  allPRSADnoAPOEout %<>% mutate(sample ="MAIN")
 }
 
 
@@ -165,9 +168,7 @@ if (makeExcel) {
                "Fig_4b-c noAPOE",
                
                "Fig_4e PRS-AD",
-               "Fig_4e noAPOE",
-               
-               "Fig_5c-d replication"
+               "Fig_4e noAPOE"
     )
     for (sheetnum in 1:length(sheets)) {
       addWorksheet(wb, sheets[sheetnum])
@@ -315,6 +316,14 @@ if (makeExcel) {
     df5 %<>% dplyr::select(all_of(common_names), everything()) %>% select(-SS, -HC, -contains("dotalpha")) %>% rename(window = ww)
     df6 %<>% dplyr::select(all_of(common_names), everything()) %>% select(-SS, -HC, -contains("dotalpha")) %>% rename(window = ww)
     
+    df3 %<>% mutate(
+      sample ="MAIN")
+    df4 %<>% mutate(
+      sample ="MAIN")
+    df5 %<>% mutate(
+      sample ="MAIN")
+    df6 %<>% mutate(
+      sample ="MAIN")
     
 
     df4[df3$FDRsig_PRSAD != 1,c(2:6, 13:15)] = NA
@@ -335,54 +344,8 @@ if (makeExcel) {
     writeData(wb, sheet = sheets[11], df5)
     writeData(wb, sheet = sheets[12], df6)
 
-    # for (num in 1:length(newsheets)) {
-    #   addStyle(wb, sheet = sheets[num], style = header_style, rows = 1, cols = 1:ncol(df6), gridExpand = TRUE)
-    #   setColWidths(wb, sheet = sheets[num], cols = 1:ncol(df6), widths = "auto")
-    # }
-    # saveWorkbook(wb, file = "source_data.xlsx", overwrite = TRUE)
     
-    
-    # add multivariate results from replication sample
-    load(here("results/PRS-ADmodels_figure5_PCmultivariate_replication.Rda"))
-    
-    #harmonize colnames
-    common_names = names(figure5C_PRSAD)[names(figure5C_PRSAD) %in% new_names]
-    names(figure5C_PRSAD)[!names(figure5C_PRSAD) %in% new_names]
-    new_names[!new_names %in% names(figure5C_PRSAD)]
-    
-    munge_cols = function(dat, roi) {
-      dat$roi = roi
-      dat$roiname = dat$roi
-      dat %<>% rename(lower_agerange_genetic = agecut, apoe = ap)
-      dat %<>% mutate(change = "ageRelChange",
-                      model = row_number(),
-                      HC = "noHCv_noAmyV"
-                      )
-      dat %<>% select(-contains("conf"), -type)
-    }
-    
-    figure5C_PRSAD = munge_cols(figure5C_PRSAD, "PC1relChange")
-    figure5C_PRSAD %<>% select(-absestimateneg)
-    new_names[!new_names %in% names(figure5C_PRSAD)]
-    names(figure5C_PRSAD)[!names(figure5C_PRSAD) %in% new_names]
-    
-    
-    df7 = figure5C_PRSAD
-    
-    
-    common_names = new_names[new_names %in% names(df7)]
-    df7 %<>% dplyr::select(all_of(common_names), everything()) %>% select(-SS, -dotalpha, -ww, -HC)
-
-    # newsheets = c("Fig_5c-d replication"
-    # )
-    
-    # for (num in 1:length(newsheets)) {
-    #   addWorksheet(wb, newsheets[num])
-    # }
-    
-    writeData(wb, sheet = sheets[13], df7)
-    
-    df_list = list(df1, df2, df3, df4, df5, df6, df7)
+    df_list = list(df1, df2, df3, df4, df5, df6)
     maxcols = max(sapply(df_list, ncol))
     unique(unlist(sapply(df_list, names)))
     
@@ -391,7 +354,7 @@ if (makeExcel) {
       addStyle(wb, sheet = sheets[num], style = header_style, rows = 1, cols = 1:maxcols, gridExpand = TRUE)
       setColWidths(wb, sheet = sheets[num], cols = 1:maxcols, widths = "auto")
     }
-    saveWorkbook(wb, file = "source_data.xlsx", overwrite = TRUE)
+    saveWorkbook(wb, file = "source_data_main.xlsx", overwrite = TRUE)
     
     
   } else {
@@ -409,6 +372,6 @@ if (makeExcel) {
     
     writeData(wb, sheet = sheets[1], rename_cols(df1))
     writeData(wb, sheet = sheets[2], rename_cols(df2))
-    saveWorkbook(wb, file = "simulated.xlsx", overwrite = TRUE)
+    saveWorkbook(wb, file = "simulated_data.xlsx", overwrite = TRUE)
   }
 }

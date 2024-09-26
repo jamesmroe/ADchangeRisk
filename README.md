@@ -1,6 +1,5 @@
-<p align="left">
-  <img title="LCBC logo" src="docs/images/LCBC_logo.png" width="400">
-</p>
+![LCBC logo](docs/images/LCBC_logo.png)
+
 
 Repository associated with the paper
 
@@ -15,7 +14,8 @@ Status: Accepted (Nature Communications)
 
 **The following scripts will run with simulated input:**
 
-* **_01a-ADchangeRisk_GAMMprocPRS_simulate.r_**\
+* **_01a-ADchangeRisk_GAMMprocPRS_simulate.r_**  
+
 `R` script to run simulated GAMM trajectory modelling example and PRS-AD association test procedure with simulated data.\
 _Instructions:_ Open Rproject file `ADchangeRisk.Rproj`. Script will run with the provided simulated data.
 
@@ -24,15 +24,26 @@ _Instructions:_ Open Rproject file `ADchangeRisk.Rproj`. Script will run with th
 
 **The following scripts will run with provided summary-level data as input:**
 
-* **_02-GAMMprocPRS_merge.r_**\
-_Instructions:_\
+* **_02-GAMMprocPRS_merge.r_**  
+
+_Instructions:_  
 Set `simulated = 0` to load the provided summary-level source data underlying Fig. 1D-E and Fig. 2 (PRS-AD tests), run multiple testing correction, and reproduce plots.\
 Set `simulated = 1` to visualize the simulated PRS-AD assocation tests from `01a-ADchangeRisk_GAMMprocPRS_simulate.r`.
+
+* **_plotUnivariate.R_**  
+
+_Instructions:_  
+set to `analysis_sample` to "main" or "replication" to plot the univariate PRS-AD results for that sample. This script is similar to the one above with added functionality for plotting the replication results.
+
+* **_plotMultivariate.R_**  
+
+_Instructions:_  
+set to `analysis_sample` to "main" or "replication" to plot the multivariate PRS-AD results for that sample.
 
 <br>
 <hr>
 
-**The following scripts reproduce paper results but require access to restricted individual-level data and are not be executable:**
+**The following scripts reproduce paper results but require access to restricted individual-level data and are _not executable_:**
 
 * **_01-GAMMprocPRS.r_**
 

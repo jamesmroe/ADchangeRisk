@@ -6,7 +6,7 @@
 
 
 #========================================================================================#
-## Purpose: plot PRS-AD model results
+## Purpose: plot PRS-AD model results for main sample
 ## Instructions:
 ## Set simulated = 0 to load the provided summary-level source data underlying Fig. 1E-F and Fig. 2 (PRS-AD association tests),
 ##                   run multiple testing correction, and reproduce plots
@@ -23,7 +23,6 @@ rm(list=ls())
 simulated = 0
 saveplots = 0
 load_from = "excel" #/ "Rdat"
-# load_from = "Rdat"
 # select analysis stream -----------------
 
 
@@ -80,13 +79,13 @@ if (load_from == "excel") {
     
     if (simulated) {
       print("loading simulated results")
-      PRSAD <- read.xlsx("simulated.xlsx", sheet = sheet)
-      PRSAD_NOAPOE <- read.xlsx("simulated.xlsx", sheet = sheet+1)
+      PRSAD <- read.xlsx("simulated_data.xlsx", sheet = sheet)
+      PRSAD_NOAPOE <- read.xlsx("simulated_data.xlsx", sheet = sheet+1)
       
     } else if (!simulated) {
       print("loading published results")
-      PRSAD <- read.xlsx("source_data.xlsx", sheet = sheet)
-      PRSAD_NOAPOE <- read.xlsx("source_data.xlsx", sheet = sheet+1)
+      PRSAD <- read.xlsx("source_data_main.xlsx", sheet = sheet)
+      PRSAD_NOAPOE <- read.xlsx("source_data_main.xlsx", sheet = sheet+1)
     }
   
     SLOPESALL1 %<>% rbind(., PRSAD[PRSAD$change == "ageRelChange",]) #AGERELSLOPE (PRS-AD age-relative change)
@@ -109,12 +108,12 @@ if (load_from == "excel") {
     
     if (simulated) {
       print("loading simulated results")
-      load(here("simulate/PRSADmodels_simulated.Rda"))
+      load(here("simulate/PRS-ADmodels_simulated.Rda"))
     
     } else if (!simulated) {
       #main results
       print("loading published results")
-      filename = paste0(here(paste0("results/PRSADmodels_S1_",roiname,".publication.Rda")))
+      filename = paste0(here(paste0("results/PRS-ADmodels_S1_",roiname,".publication.Rda")))
       print(paste0("loading ",filename))
       load(filename)  
     }
