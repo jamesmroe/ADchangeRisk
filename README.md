@@ -1,7 +1,7 @@
 ![LCBC logo](docs/images/LCBC_logo.png)
 
 
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.13844799.svg)](https://doi.org/10.5281/zenodo.13844799)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.13861219.svg)](https://doi.org/10.5281/zenodo.13861219)
 
 
 Repository associated with the paper
